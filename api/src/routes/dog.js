@@ -1,10 +1,10 @@
 const { Router } = require ('express');
 const axios = require ('axios');
 const { Dog, Temperament } = require('../db');
-const { YOUR_API_KEY } = process.env;
-
+require('dotenv').config();
 
 const router = Router();
+const YOUR_API_KEY = process.env.YOUR_API_KEY;
 
 const getApiInfo = async() => {
     const apiUrl = await axios.get(`https://api.thedogapi.com/v1/breeds?key=${YOUR_API_KEY}`);
@@ -41,7 +41,6 @@ const getDbInfo = async () => {
         return infoTotal; //me devuelve un arreglo
   };
   
-
 router.get('/', async (req, res) => {
     const name = req.query.name //un query con la propiedad name que me pasan por url
     let dogsTotal = await getAllDogs();
@@ -55,7 +54,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     const dogsTotal = await getAllDogs()
@@ -66,11 +64,6 @@ router.get('/:id', async (req, res) => {
         res.status(404).send('That id was not found 😕')
     }
 })
-    
-        
-    
-
-
 
 router.post('/', async (req, res) => {
     let {
@@ -102,9 +95,5 @@ router.post('/', async (req, res) => {
     dogCreated.addTemperament(temperamentDb) //Temperament de la tabla de base de datos
     res.send('Dog created 🐶')
 });
-
-
-
-
 
 module.exports = router;
